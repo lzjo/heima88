@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="right">
-      <img src="@/assets/login_banner_ele.png" alt="">
+      <img src="@/assets/login_banner_ele.png" alt="11">
     
     </div>
   </div>
