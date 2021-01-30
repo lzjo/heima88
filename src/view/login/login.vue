@@ -22,22 +22,21 @@ export default {
 </script>
 
 <style lang="less">
-  .login{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    height: 100%;
-    background: linear-gradient(
+.login {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  background: linear-gradient(
       225deg,
     rgba(20, 147, 250, 1),
     rgba(1, 198, 250, 1)
   );
-    .left{
-      width: 478px;
-      height: 550px;
-      background: rgba(245, 245, 245, 1);
-      padding: 43px;
-
+  .left{
+  width: 478px;
+  height: 550px;
+  background: rgba(245, 245, 245, 1);
+  padding: 43px;
       .titleName{
         font-size: 24px;
         font-weight: 400;
@@ -53,6 +52,6 @@ export default {
         font-size: 22px;
         margin-left: 15px;
       }
-    }
   }
+}
 </style>
