@@ -34,18 +34,23 @@
       <el-form-item>
         <el-button type="primary" class="btn" @click="loginclick">登录</el-button>
           <br>
-        <el-button type="primary" class="btn">注册</el-button>
+        <el-button type="primary" class="btn" @click="registerclick">注册</el-button>
       </el-form-item>
       </el-form>
     </div>
     <div class="right">
       <img src="@/assets/img/login_banner_ele.png" alt="11" />
     </div>
+    <register ref="register"></register>
   </div>
 </template>
 
 <script>
+import register from './register.vue'
 export default {
+  components:{
+    register
+  },
   name: "login",
   data() {
     return {
@@ -75,6 +80,9 @@ export default {
       this.$refs.form.validate((res)=>{
         this.$message.success(res+"");
       })
+    },
+    registerclick(){
+      this.$refs.register.dialogVisible = true
     }
   },
 };
