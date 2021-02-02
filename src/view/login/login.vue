@@ -75,6 +75,9 @@ export default {
       }
     };
   },
+  mounted() {
+    alert(process.env.VUE_APP_URL)
+  },
   methods: {
     loginclick(){
       this.$refs.form.validate((res)=>{
