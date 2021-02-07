@@ -34,7 +34,7 @@
               ></el-input>
             </el-col>
             <el-col :span="8">
-              <img src="@/assets/img/key.jpg" class="key" alt="" />
+              <img :src="code" @click="codeClick" class="key" alt="" />
             </el-col>
           </el-row>
         </el-form-item>
@@ -71,6 +71,7 @@ export default {
   name: "login",
   data() {
     return {
+      code: process.env.VUE_APP_URL + "/captcha?type=login",
       rules: {
         phone: [
           { required: true, message: "请输入手机号", trigger: "change" },
@@ -103,6 +104,10 @@ export default {
     };
   },
   methods: {
+    codeClick() {
+      this.code =
+        process.env.VUE_APP_URL + "/captcha?type=login&t" + Date.now();
+    },
     loginclick() {
       this.$refs.form.validate((res) => {
         this.$message.success(res + "");
