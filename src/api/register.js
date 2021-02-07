@@ -1,10 +1,46 @@
 import axios from 'axios'
+import { Message } from 'element-ui';
+let instance = axios.create({
+    baseURL: process.env.VUE_APP_URL,
+    withCredentials: true,
+});
+
+// 添加请求拦截器
+instance.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    return config;
+}, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+});
+
+// 添加响应拦截器
+instance.interceptors.response.use(function (response) {
+    // 对响应数据做点什么
+    if (response.data.code == 200) {
+        return response.data;
+    } else {
+        Message.error(response.data.message);
+        return Promise.reject('error');
+    }
+}, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+// 获取手机验证码
 function getphonecode(data) {
-    return axios({
-        url: process.env.VUE_APP_URL + "/sendsms",
+    return instance({
+        url: "/sendsms",
         method: "post",
         data: data,
-        withCredentials: true,
     })
 }
-export default getphonecode
+function register(data) {
+    return instance({
+        url: "/register",
+        method: "post",
+        data: data,
+    })
+}
+// export default getphonecode
+export { getphonecode, register }

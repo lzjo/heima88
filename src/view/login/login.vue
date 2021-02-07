@@ -72,7 +72,19 @@ export default {
   data() {
     return {
       rules: {
-        phone: [{ required: true, message: "请输入手机号", trigger: "change" }],
+        phone: [
+          { required: true, message: "请输入手机号", trigger: "change" },
+          {
+            validator: (rule, value, callback) => {
+              let _reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+              if (_reg.test(value)) {
+                callback();
+              } else {
+                callback("请正确输入手机号");
+              }
+            },
+          },
+        ],
         password: [
           { required: true, message: "请输入密码", trigger: "change" },
           { min: 6, max: 12, message: "请输入6到12位密码", trigger: "change" },

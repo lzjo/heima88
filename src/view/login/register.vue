@@ -50,13 +50,20 @@
             <el-input v-model="form.rcode"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <el-button class="rcodebtn" @click="getRcode">获取验证码</el-button>
+            <el-button
+              class="rcodebtn"
+              @click="getRcode"
+              :disabled="totalTime != 60"
+              >获取验证码<span v-if="totalTime != 60">{{
+                totalTime
+              }}</span></el-button
+            >
           </el-col>
         </el-row>
       </el-form-item>
     </el-form>
     <div slot="" class="centerClick">
-      <el-button>取消</el-button>
+      <el-button @click="dialogVisible = false">取消</el-button>
       <el-button type="primary" @click="confirmClick">确定</el-button>
     </div>
   </el-dialog>
@@ -64,13 +71,14 @@
 
 <script>
 // import axios from "axios";
-import getphonecode from "@/api/register.js";
+import { getphonecode, register } from "@/api/register.js";
 export default {
   name: "register",
   data() {
     return {
       codeUrl: process.env.VUE_APP_URL + "/captcha?type=sendsms",
       dialogVisible: false,
+      totalTime: 60,
       form: {
         // 保存的图片链接
         avatar: "",
@@ -132,6 +140,14 @@ export default {
       imageUrl: "",
     };
   },
+  watch: {
+    dialogVisible(newval) {
+      if (newval == false) {
+        this.$refs.form.resetFields();
+        this.imageUrl = "";
+      }
+    },
+  },
   methods: {
     // 图片上传成功后的方法
     handleAvatarSuccess(res, file) {
@@ -164,8 +180,16 @@ export default {
     },
     // 点击确定全局验证方法
     confirmClick() {
-      this.$refs.form.validate((res) => {
-        console.log(res);
+      this.$refs.form.validate((reslt) => {
+        console.log(reslt);
+        if (reslt) {
+          register(this.form).then((res) => {
+            console.log(res);
+
+            this.$message.success("注册成功");
+            this.dialogVisible = false;
+          });
+        }
       });
     },
     // 点击获取验证码
@@ -179,12 +203,20 @@ export default {
       if (_pass === false) {
         return;
       } else {
+        this.totalTime--;
+        let _interval = setInterval(() => {
+          this.totalTime--;
+          if (this.totalTime <= 0) {
+            clearInterval(_interval);
+            this.totalTime = 60;
+          }
+        }, 1000);
         getphonecode({
           code: this.form.code,
           phone: this.form.phone,
         }).then((res) => {
           console.log(res);
-          this.$message.success(res.data.data.captcha + "");
+          this.$message.success(res.data.captcha + "");
         });
       }
     },
