@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui';
-import { getToken } from './token.js'
+import { getToken, removeToken } from './token.js'
+import router from '@/router/router.js'
 let instance = axios.create({
     baseURL: process.env.VUE_APP_URL,
     withCredentials: true,
@@ -23,6 +24,11 @@ instance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     if (response.data.code == 200) {
         return response.data;
+    } else if (response.data.code == 206) {
+        Message.error(response.data.message);
+        router.push('/')
+        removeToken()
+        return Promise.reject('error');
     } else {
         Message.error(response.data.message);
         return Promise.reject('error');

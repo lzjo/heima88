@@ -56,7 +56,7 @@
 <script>
 import register from "./register.vue";
 import { toLogin } from "@/api/login.js";
-import { saveToken } from "@/utils/token.js";
+import { saveToken, getToken } from "@/utils/token.js";
 export default {
   components: {
     register
@@ -108,11 +108,17 @@ export default {
       }
     };
   },
+  created() {
+    if (getToken()) {
+      this.$router.push("/home");
+    }
+  },
   methods: {
     codeClick() {
       this.code =
         process.env.VUE_APP_URL + "/captcha?type=login&t" + Date.now();
     },
+    // 点击确认按钮
     loginclick() {
       this.$refs.form.validate(result => {
         // this.$message.success(result + "");
@@ -121,6 +127,7 @@ export default {
             this.$message.success("登陆成功");
             console.log(res);
             saveToken(res.data.token);
+            this.$router.push("/home");
           });
         }
       });
