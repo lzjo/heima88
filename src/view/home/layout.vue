@@ -15,37 +15,44 @@
     <el-container>
       <el-aside width="auto" class="aside">
         <!-- 左侧从菜单栏 -->
-        <el-menu default-active="1" class="el-menu-vertical-demo" :collapse="collapse">
-          <el-menu-item index="1">
+        <el-menu
+          :default-active="$route.fullpath"
+          :router="true"
+          class="el-menu-vertical-demo"
+          :collapse="collapse"
+        >
+          <el-menu-item index="/home/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="/home/userList">
             <i class="el-icon-user"></i>
             <span slot="title">用户列表</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="/home/question">
             <i class="el-icon-edit-outline"></i>
             <span slot="title">题库列表</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="/home/business">
             <i class="el-icon-office-building"></i>
             <span slot="title">企业列表</span>
           </el-menu-item>
-          <el-menu-item index="5">
+          <el-menu-item index="/home/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
           </el-menu-item>
         </el-menu>
       </el-aside>
-      <el-main class="main">Main</el-main>
+      <el-main class="main">
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 import { getUseInfo, exitLogin } from "@/api/home.js";
-import { removeToken } from "@/utils/token.js";
+import { removeToken, getToken } from "@/utils/token.js";
 export default {
   data() {
     return {
@@ -70,6 +77,11 @@ export default {
     }
   },
   created() {
+    // console.log("路由", this.$route);
+    if (!getToken()) {
+      this.$router.push("/");
+      return;
+    }
     getUseInfo().then(res => {
       this.userInfo = res.data;
       this.userInfo.avatar =
@@ -89,6 +101,7 @@ export default {
     align-items: center;
     height: 60px;
     background: white;
+    box-shadow: 0px 2px 5px 0px rgba(63, 63, 63, 0.35);
     .left {
       .setheight {
         font-size: 20px;
@@ -117,6 +130,7 @@ export default {
   }
   .aside {
     background: white;
+    box-shadow: 0px 2px 5px 0px rgba(63, 63, 63, 0.35);
     .el-menu-vertical-demo:not(.el-menu--collapse) {
       width: 160px;
     }
