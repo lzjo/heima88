@@ -136,5 +136,8 @@ export default {
       width: 160px;
     }
   }
+  .main {
+    background-color: #ccc;
+  }
 }
 </style>
