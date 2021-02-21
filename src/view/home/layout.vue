@@ -21,7 +21,16 @@
           class="el-menu-vertical-demo"
           :collapse="collapse"
         >
-          <el-menu-item index="/home/chart">
+          <el-menu-item
+            :index="'/home/'+ item.path"
+            v-for="(item,index) in $router.options.routes[1].children"
+            :key="index"
+            v-show="item.meta.rule.includes($store.state.role)"
+          >
+            <i :class="item.meta.icon"></i>
+            <span slot="title">{{item.meta.title}}</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="/home/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
           </el-menu-item>
@@ -40,7 +49,7 @@
           <el-menu-item index="/home/subject">
             <i class="el-icon-notebook-2"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item>-->
         </el-menu>
       </el-aside>
       <el-main class="main">
@@ -77,6 +86,7 @@ export default {
     }
   },
   created() {
+    console.log("路由信心111", this.$router);
     // console.log("路由", this.$route);
     if (!getToken()) {
       this.$router.push("/");
@@ -87,7 +97,19 @@ export default {
       this.userInfo.avatar =
         process.env.VUE_APP_URL + "/" + this.userInfo.avatar;
       console.log("用户信息获取", res);
+      if (res.data.status == 0) {
+        this.$message.warning("您的账号已被禁用");
+        removeToken();
+        this.$router.push("/");
+      } else {
+        if (!this.$route.meta.rule.includes(res.data.role)) {
+          this.$message.warning("您无权访问此页面");
+          removeToken();
+          this.$router.push("/");
+        }
+      }
       this.$store.state.userInfo = this.userInfo;
+      this.$store.state.role = res.data.role;
     });
   }
 };
