@@ -1,5 +1,5 @@
 import instance from '@/utils/request.js'
-// 获取手机验证码
+
 function getsubjectdata(params) {
     return instance({
         url: "/subject/list",
