@@ -1,10 +1,5 @@
 <template>
-  <el-dialog
-    :visible.sync="dialogVisible"
-    width="600px"
-    class="register"
-    :show-close="false"
-  >
+  <el-dialog :visible.sync="dialogVisible" width="600px" class="register" :show-close="false">
     <el-form :model="form" label-width="80px" :rules="rules" ref="form">
       <div slot="title" class="title">用户注册</div>
       <el-form-item label="头像" prop="avatar">
@@ -39,7 +34,7 @@
           </el-col>
           <el-col :span="7" :offset="1">
             <div class="picheight">
-              <img class="code" :src="codeUrl" @click="codeUrlimg" alt="" />
+              <img class="code" :src="codeUrl" @click="codeUrlimg" alt />
             </div>
           </el-col>
         </el-row>
@@ -50,19 +45,19 @@
             <el-input v-model="form.rcode"></el-input>
           </el-col>
           <el-col :span="7" :offset="1">
-            <el-button
-              class="rcodebtn"
-              @click="getRcode"
-              :disabled="totalTime != 60"
-              >获取验证码<span v-if="totalTime != 60">{{
+            <el-button class="rcodebtn" @click="getRcode" :disabled="totalTime != 60">
+              获取验证码
+              <span v-if="totalTime != 60">
+                {{
                 totalTime
-              }}</span></el-button
-            >
+                }}
+              </span>
+            </el-button>
           </el-col>
         </el-row>
       </el-form-item>
     </el-form>
-    <div slot="" class="centerClick">
+    <div slot class="centerClick">
       <el-button @click="dialogVisible = false">取消</el-button>
       <el-button type="primary" @click="confirmClick">确定</el-button>
     </div>
@@ -87,13 +82,13 @@ export default {
         phone: "",
         password: "",
         code: "",
-        rcode: "",
+        rcode: ""
       },
       // 验证规则
       rules: {
         avatar: [{ required: true, message: "请上传图片", trigger: "change" }],
         username: [
-          { required: true, message: "请填写昵称", trigger: "change" },
+          { required: true, message: "请填写昵称", trigger: "change" }
         ],
         email: [
           { required: true, message: "请输入邮箱", trigger: "change" },
@@ -105,8 +100,8 @@ export default {
               } else {
                 callback("请正确输入邮箱");
               }
-            },
-          },
+            }
+          }
         ],
         phone: [
           { required: true, message: "请输入手机号", trigger: "change" },
@@ -118,26 +113,26 @@ export default {
               } else {
                 callback("请正确输入手机号");
               }
-            },
-          },
+            }
+          }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "change" },
-          { min: 6, max: 12, message: "请输入6到12位密码", trigger: "change" },
+          { min: 6, max: 12, message: "请输入6到12位密码", trigger: "change" }
         ],
         code: [
           { required: true, message: "请输入图形码", trigger: "change" },
-          { min: 4, max: 4, message: "请输入4位图形码", trigger: "change" },
+          { min: 4, max: 4, message: "请输入4位图形码", trigger: "change" }
         ],
         rcode: [
           { required: true, message: "请输入验证码", trigger: "change" },
-          { min: 4, max: 4, message: "请输入4位验证码", trigger: "change" },
-        ],
+          { min: 4, max: 4, message: "请输入4位验证码", trigger: "change" }
+        ]
       },
       //基地址
       baseUrl: process.env.VUE_APP_URL,
       //上传的 图片
-      imageUrl: "",
+      imageUrl: ""
     };
   },
   watch: {
@@ -146,7 +141,7 @@ export default {
         this.$refs.form.resetFields();
         this.imageUrl = "";
       }
-    },
+    }
   },
   methods: {
     // 图片上传成功后的方法
@@ -180,10 +175,10 @@ export default {
     },
     // 点击确定全局验证方法
     confirmClick() {
-      this.$refs.form.validate((reslt) => {
+      this.$refs.form.validate(reslt => {
         console.log(reslt);
         if (reslt) {
-          register(this.form).then((res) => {
+          register(this.form).then(res => {
             console.log(res);
 
             this.$message.success("注册成功");
@@ -195,7 +190,7 @@ export default {
     // 点击获取验证码
     getRcode() {
       let _pass = true;
-      this.$refs.form.validateField(["code", "phone"], (error) => {
+      this.$refs.form.validateField(["code", "phone"], error => {
         if (error != "") {
           _pass = false;
         }
@@ -213,14 +208,14 @@ export default {
         }, 1000);
         getphonecode({
           code: this.form.code,
-          phone: this.form.phone,
-        }).then((res) => {
+          phone: this.form.phone
+        }).then(res => {
           console.log(res);
           this.$message.success(res.data.captcha + "");
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
